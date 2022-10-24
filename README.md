@@ -1,9 +1,7 @@
-# OOP Template
+# ParticleSim++
 
-### Tema 0
-
-- [ ] Nume proiect (îl puteți schimba ulterior)
-- [ ] Scurtă descriere a temei alese, ce v-ați propus să implementați
+### ParticleSim++
+Simulator de particule
 
 ## Tema 1
 
