@@ -114,11 +114,11 @@ class Pixel {
     bool has_Border;
     //int Gravity;
     public:
-    void Create(int SizeX, int SizeY, bool hasBorder)
+    void Create(int SizeX_, int SizeY_, bool hasBorder)
     {  
         //std::cout<<"Create World "<<SizeX <<" x "<<SizeY<<std::endl; 
-        this->SizeX=SizeX;
-        this->SizeY=SizeY;
+        this->SizeX=SizeX_;
+        this->SizeY=SizeY_;
         this->has_Border = hasBorder;
 
         for(int i = 0; i<SizeY; i++){
