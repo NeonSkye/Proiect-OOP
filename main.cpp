@@ -119,6 +119,7 @@ class Pixel {
         //std::cout<<"Create World "<<SizeX <<" x "<<SizeY<<std::endl; 
         this->SizeX=SizeX;
         this->SizeY=SizeY;
+        this->has_Border = hasBorder;
 
         for(int i = 0; i<SizeY; i++){
             std::vector<Pixel> v1;
@@ -127,6 +128,7 @@ class Pixel {
             {
                 if(hasBorder==1)
                 {
+        
                 //std::cout<<"test1";
                 if(i==0||i==SizeY-1)
                 v1.push_back({"WALL",1,4});
