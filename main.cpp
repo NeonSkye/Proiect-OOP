@@ -56,21 +56,6 @@ class Pixel {
         &colour.b=b;
         &colour.a=a;
     } */
-    Pixel(const std::string& Name_, int ID_l, int Type_) : Name{Name_}, ID_list{ID_l}, Type{Type_}{
-        /* std::cout<<"Constructor initializare Pixel"<<std::endl;
-        std::cout<<"Created Pixel "<< Name <<" With ID "<< ID << " Type " << Type << " And Behaviour " << std::endl; */
-    }
-    Pixel(const Pixel& other): Name{other.Name}, ID_list{other.ID_list}, Type{other.Type} {
-        /* std::cout<<"Constructor copiere Pixel"<<std::endl; */
-         //std::cout<<"Copied Pixel "<< Name <<" With ID "<< ID << " Type " << Type << " And Behaviour " << std::endl;
-    }
-    Pixel& operator=(const Pixel& other) {
-        Name = other.Name;
-        ID_list = other.ID_list;
-        Type = other.Type;
-        /* std::cout<<"Operator= copiere Pixel"<<std::endl; */
-        return *this;
-    }
     int getID_list()
     {
         return ID_list;
@@ -102,6 +87,23 @@ class Pixel {
         os << "Type " << px.Type << " ID_list " << px.ID_list << "\n";
         return os;
     }
+    Pixel(const std::string& Name_, int ID_l, int Type_, int posX_, int posY_) : Name{Name_}, ID_list{ID_l}, Type{Type_}, posX{posX_}, posY{posY_}{
+        /* std::cout<<"Constructor initializare Pixel"<<std::endl;
+        std::cout<<"Created Pixel "<< Name <<" With ID "<< ID << " Type " << Type << " And Behaviour " << std::endl; */
+    }
+    Pixel(const Pixel& other): Name{other.Name}, ID_list{other.ID_list}, Type{other.Type}, posX{other.posX}, posY{other.posY} {
+        /* std::cout<<"Constructor copiere Pixel"<<std::endl; */
+         //std::cout<<"Copied Pixel "<< Name <<" With ID "<< ID << " Type " << Type << " And Behaviour " << std::endl;
+    }
+    Pixel& operator=(const Pixel& other) {
+        Name = other.Name;
+        ID_list = other.ID_list;
+        Type = other.Type;
+        posX = other.posX;
+        posY = other.posY;
+        /* std::cout<<"Operator= copiere Pixel"<<std::endl; */
+        return *this;
+    }
 }; 
 
  class World{
@@ -131,15 +133,15 @@ class Pixel {
         
                 //std::cout<<"test1";
                 if(i==0||i==SizeY-1)
-                v1.push_back({"WALL",1,4});
+                v1.push_back({"WALL",1,4,j,i});
                 else
                     if(j==0||j==SizeX-1)
-                    v1.push_back({"WALL",1,4});
+                    v1.push_back({"WALL",1,4,j,i});
                     else
-                        v1.push_back({"VOID",0,0});
+                        v1.push_back({"VOID",0,0,j,i});
                         }
                         else
-                            v1.push_back({"VOID",0,0});
+                            v1.push_back({"VOID",0,0,j,i});
             }
             box.push_back(v1); 
         } 
@@ -219,7 +221,7 @@ class Pixel {
                 {
                     std::cout<<"checkBox success"<<std::endl;
                     box[posY+1][posX] = P;
-                    box[posY][posX] = {"VOID",0,0};
+                    box[posY][posX] = {"VOID",0,0,posX,posY};
                     P.setCoords(posX,posY+1);
                 }
                 else std::cout<<"checkBox failed"<<std::endl;
@@ -293,7 +295,7 @@ int main()
     //sf::RenderWindow window(sf::VideoMode(800, 600), "SFML window");
     World w1{5,5,1};
     std::cout<<w1;
-    Pixel p1{"DUST",2,1};
+    Pixel p1{"DUST",2,1,0,0};
     /* PixelBehaviour pb1{p1}; */
     bool isActive = 0;
     w1.drawBox();
