@@ -179,10 +179,10 @@ class Pixel {
         
                 std::cout<<"------------------------"<<std::endl;
     }
-    std::vector<std::vector<Pixel>> getBox()
+/*     std::vector<std::vector<Pixel>> getBox()
     {
         return box;
-    }
+    } */
     /* int getGravity()
     {
         return Gravity;
