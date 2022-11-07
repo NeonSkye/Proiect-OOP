@@ -35,7 +35,7 @@ class Pixel {
     private:
     std::string Name;
     //sf::Color colour(0,0,0,255);
-    int ID;
+    int ID_list;
     int Type;
     int posX, posY;
     //int x, y;
@@ -56,24 +56,24 @@ class Pixel {
         &colour.b=b;
         &colour.a=a;
     } */
-    Pixel(const std::string Name_, int ID_, int Type_) : Name{Name_}, ID{ID_}, Type{Type_}{
+    Pixel(const std::string& Name_, int ID_l, int Type_) : Name{Name_}, ID_list{ID_l}, Type{Type_}{
         /* std::cout<<"Constructor initializare Pixel"<<std::endl;
         std::cout<<"Created Pixel "<< Name <<" With ID "<< ID << " Type " << Type << " And Behaviour " << std::endl; */
     }
-    Pixel(const Pixel& other): Name{other.Name}, ID{other.ID}, Type{other.Type} {
+    Pixel(const Pixel& other): Name{other.Name}, ID_list{other.ID_list}, Type{other.Type} {
         /* std::cout<<"Constructor copiere Pixel"<<std::endl; */
          //std::cout<<"Copied Pixel "<< Name <<" With ID "<< ID << " Type " << Type << " And Behaviour " << std::endl;
     }
     Pixel& operator=(const Pixel& other) {
         Name = other.Name;
-        ID = other.ID;
+        ID_list = other.ID_list;
         Type = other.Type;
         /* std::cout<<"Operator= copiere Pixel"<<std::endl; */
         return *this;
     }
-    int getID()
+    int getID_list()
     {
-        return ID;
+        return ID_list;
     }
     int getType()
     {
@@ -99,7 +99,7 @@ class Pixel {
         /* std::cout <<"Destructor Pixel"<<std::endl; */
     }
     friend std::ostream& operator<<(std::ostream& os, const Pixel& px){
-        os << "Type " << px.Type << " ID " << px.ID << "\n";
+        os << "Type " << px.Type << " ID_list " << px.ID_list << "\n";
         return os;
     }
 }; 
@@ -108,7 +108,7 @@ class Pixel {
 
     private:
     std::vector<std::vector<Pixel>> box;
-    sf::Vector2f v1; //Convert box to SFML vector so I can draw the pixels
+   
     int SizeX;
     int SizeY;
     bool has_Border;
@@ -133,13 +133,13 @@ class Pixel {
                 if(i==0||i==SizeY-1)
                 v1.push_back({"WALL",1,4});
                 else
-                if(j==0||j==SizeX-1)
-                v1.push_back({"WALL",1,4});
-                else
-                v1.push_back({"VOID",0,0});
-                }
-                else
-                v1.push_back({"VOID",0,0});
+                    if(j==0||j==SizeX-1)
+                    v1.push_back({"WALL",1,4});
+                    else
+                        v1.push_back({"VOID",0,0});
+                        }
+                        else
+                            v1.push_back({"VOID",0,0});
             }
             box.push_back(v1); 
         } 
@@ -149,7 +149,7 @@ class Pixel {
         }
     
     
-    void setBox(std::vector<std::vector<Pixel>> box_)
+/*     void setBox(std::vector<std::vector<Pixel>> box_)
     {
         for(int i = 0; i<SizeY; i++){
             std::vector<Pixel> v1;
@@ -160,7 +160,7 @@ class Pixel {
             }
             this->box.push_back(v1); 
         } 
-    }
+    } */
 
 
 
@@ -172,7 +172,7 @@ class Pixel {
         {
             for(int j = 0; j<SizeX; j++)
             {
-               std::cout<<box[i][j].getID()<<" ";
+               std::cout<<box[i][j].getID_list()<<" ";
             }
             std::cout<<std::endl;
         }
@@ -186,47 +186,41 @@ class Pixel {
     /* int getGravity()
     {
         return Gravity;
-    } */
-    int getSizeX()
+    }
+     int getSizeX()
     {
         return SizeX;
     }
     int getSizeY()
     {
         return SizeY;
-    }
+    } */
     friend std::ostream& operator<<(std::ostream& os, const World& w)
     {
         os<<"Size World " << w.SizeX << " x " <<w.SizeY <<"\n";
         return os;
     }
-        void SetPixel(Pixel P, int posX, int posY)
+        void SetPixel(Pixel& P, int posX, int posY)
     {   
-        box[posX][posY] = P;
-        //std::cout<<box[posX][posY+1].getID()<<"deubg" << std::endl;
+        box[posY][posX] = P;
         P.setCoords(posX,posY);
-        //std::cout<< P.getposX() << P.getposY() << "debug2" << std::endl;
-       /*  v1.x = posX;
-        v1.y = posY; */
+
     }
     
-        void movePixel (Pixel P)
+        void movePixel (Pixel& P)
         {
             std::cout<<"test GetPos"<< P.getposX() << P.getposY() << std::endl;
-            // Din ceva motiv getposX si getposY returneaza valori aiurea si imi crapa toata functia...
-            // In functia SetPixel getposX si getposY returneaza valori normale, adica 2,2 (coordonatele setate in main momentan)
-            // honestly am scris ce e aici la 3 dimineata dupa ce am baut asa ca ¯\_(ツ)_/¯ (●'◡'●)
             int posX = P.getposX();
             int posY = P.getposY();
             if(P.getType()==1)
             {
                 std::cout<<"getType success"<< posX << posY << std::endl;
-                if(box[posX][posY].getID() == 2)
+                if(box[posY][posX].getID_list() == 2)
                 {
-                std::cout<<"checkBox success"<<std::endl;
-                box[posX][posY+1] = P;
-                box[posX][posY] = {"VOID",0,0};
-                P.setCoords(posX,posY+1);
+                    std::cout<<"checkBox success"<<std::endl;
+                    box[posY+1][posX] = P;
+                    box[posY][posX] = {"VOID",0,0};
+                    P.setCoords(posX,posY+1);
                 }
                 else std::cout<<"checkBox failed"<<std::endl;
 
@@ -325,14 +319,17 @@ sf::RenderWindow window(sf::VideoMode(800, 600), "SFML window");
 window.setFramerateLimit(60);
 // The main loop - ends as soon as the window is closed
 sf::RectangleShape rectangle, bg;
-rectangle.setSize(sf::Vector2f(100, 50));
-bg.setSize(sf::Vector2f(800,600));
-bg.setOutlineColor(sf::Color::Black);
-bg.setOutlineThickness(5);
-bg.setFillColor(sf::Color::Black);
-rectangle.setOutlineColor(sf::Color::Red);
-rectangle.setOutlineThickness(5);
-rectangle.setPosition(10, 20);
+
+    rectangle.setSize(sf::Vector2f(100, 50));
+        rectangle.setOutlineColor(sf::Color::Red);
+        rectangle.setOutlineThickness(5);
+        rectangle.setPosition(10, 20);
+
+            bg.setSize(sf::Vector2f(800,600));
+            bg.setOutlineColor(sf::Color::Black);
+            bg.setOutlineThickness(5);
+            bg.setFillColor(sf::Color::Black);
+
 window.draw(bg);
 window.draw(rectangle);
 while (window.isOpen())
