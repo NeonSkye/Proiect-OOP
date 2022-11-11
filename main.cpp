@@ -30,6 +30,9 @@ PIXEL TYPES
 
 //TO DO: FIGURE OUT HOW TO TRANSLATE MATRIX TO GRAPHICS
 //SIMULATION ENGINE AFTER
+class Render {
+
+};
 
 class Pixel {
     private:
@@ -211,22 +214,39 @@ class Pixel {
     
         void movePixel (Pixel& P)
         {
-            std::cout<<"test GetPos"<< P.getposX() << P.getposY() << std::endl;
+            //std::cout<<"test GetPos"<< P.getposX() << P.getposY() << std::endl;
             int posX = P.getposX();
             int posY = P.getposY();
             if(P.getType()==1)
             {
-                std::cout<<"getType success"<< posX << posY << std::endl;
-                if(box[posY][posX].getID_list() == 2)
+                //std::cout<<"getType success"<< posX << posY << std::endl;
+                if(box[posY][posX].getID_list() == 2&&box[posY+1][posX].getID_list() == 0)
                 {
-                    std::cout<<"checkBox success"<<std::endl;
-                    box[posY+1][posX] = P;
+                    //std::cout<<"checkBox success"<<std::endl;
                     box[posY][posX] = {"VOID",0,0,posX,posY};
-                    P.setCoords(posX,posY+1);
+                    posY = posY+1;
+                    box[posY][posX] = P;
+                    P.setCoords(posX,posY);
                 }
-                else std::cout<<"checkBox failed"<<std::endl;
-
-
+                else
+                    if(box[posY+1][posX].getID_list() != 0&&box[posY+1][posX].getID_list() != 1)
+                    {
+                        std::cout<<"CHECK L/R";
+                        if(box[posY+1][posX+1].getID_list() == 0)
+                        {
+                            std::cout<<"check DR";
+                            box[posY][posX] = {"VOID",0,0,posX,posY};
+                            box[posY+1][posX+1] = P;
+                            P.setCoords(posX+1,posY+1);
+                        }
+                        else if(box[posY+1][posX+1].getID_list() == 2 && box[posY+1][posX-1].getID_list() == 0)
+                        {
+                            std::cout<<"check DR";
+                            box[posY][posX] = {"VOID",0,0,posX,posY};
+                            box[posY+1][posX-1] = P;
+                            P.setCoords(posX-1,posY+1);
+                        }
+                    }
             }
 
         } 
@@ -293,7 +313,7 @@ class Pixel {
 int main()
 {
     //sf::RenderWindow window(sf::VideoMode(800, 600), "SFML window");
-    World w1{5,5,1};
+    World w1{8,8,1};
     std::cout<<w1;
     Pixel p1{"DUST",2,1,0,0};
     /* PixelBehaviour pb1{p1}; */
@@ -315,22 +335,22 @@ int main()
     //w1.getWorld();
    // w1.SpawnPixel(TYPE,posX,posY,LOC);
    // w1.Update();
-sf::RenderWindow window(sf::VideoMode(800, 600), "SFML window");
+sf::RenderWindow window(sf::VideoMode(500, 500), "SFML window");
 /* sf::Vector2<Pixel> box; */
 // Limit the framerate to 60 frames per second (this step is optional)
 window.setFramerateLimit(60);
 // The main loop - ends as soon as the window is closed
 sf::RectangleShape rectangle, bg;
 
-    rectangle.setSize(sf::Vector2f(100, 50));
+        rectangle.setSize(sf::Vector2f(100, 50));
         rectangle.setOutlineColor(sf::Color::Red);
         rectangle.setOutlineThickness(5);
         rectangle.setPosition(10, 20);
 
-            bg.setSize(sf::Vector2f(800,600));
-            bg.setOutlineColor(sf::Color::Black);
-            bg.setOutlineThickness(5);
-            bg.setFillColor(sf::Color::Black);
+        bg.setSize(sf::Vector2f(500,500));
+        bg.setOutlineColor(sf::Color::Black);
+        bg.setOutlineThickness(5);
+        bg.setFillColor(sf::Color::Black);
 
 window.draw(bg);
 window.draw(rectangle);
@@ -358,20 +378,23 @@ if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 };
 // draw it
 
-
+if(sf::Mouse::isButtonPressed(sf::Mouse::Right))
+        {
+            w1.movePixel(p1);
+        }
 
 if(isActive == 0) {
 
-if(sf::Mouse::isButtonPressed(sf::Mouse::Right))
-{
-     //w1.movePixel(p1,w1);
-     rectangle.move(10,1);
-     bg.setPosition(0,0);
-     w1.movePixel(p1);
-     //rectangle.setOutlineColor(sf::Color::Blue);
-     isActive = 1;
-     window.draw(rectangle);
-}
+        if(sf::Mouse::isButtonPressed(sf::Mouse::Right))
+        {
+            //w1.movePixel(p1,w1);
+            rectangle.move(10,1);
+            bg.setPosition(0,0);
+            w1.movePixel(p1);
+            //rectangle.setOutlineColor(sf::Color::Blue);
+            isActive = 1;
+            window.draw(rectangle);
+        }
 }
 else
 {
