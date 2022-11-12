@@ -1,7 +1,9 @@
 # ParticleSim++
 
 ### ParticleSim++
-Simulator de particule
+Particle simulator!
+
+Controls: Left click to place sand under mouse cursor. (for now)
 
 ## Tema 1
 
