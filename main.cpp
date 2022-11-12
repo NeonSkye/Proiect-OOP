@@ -4,6 +4,7 @@
 //#include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
 #include<SFML/System.hpp>
+#include<cmath>
 
 /*vx, vy affected by pixel weight*/
 
@@ -30,15 +31,17 @@ PIXEL TYPES
 
 //TO DO: FIGURE OUT HOW TO TRANSLATE MATRIX TO GRAPHICS
 //SIMULATION ENGINE AFTER
-class Render {
-
-};
 
 class Pixel {
     private:
     std::string Name;
+/*     sf::RectangleShape px;
+    px.setSize(sf::Vector2f(10, 10)); */
+    //sf::RectangleShape px;
     //sf::Color colour(0,0,0,255);
+    int ID;
     int ID_list;
+    
     int Type;
     int posX, posY;
     //int x, y;
@@ -90,16 +93,17 @@ class Pixel {
         os << "Type " << px.Type << " ID_list " << px.ID_list << "\n";
         return os;
     }
-    Pixel(const std::string& Name_, int ID_l, int Type_, int posX_, int posY_) : Name{Name_}, ID_list{ID_l}, Type{Type_}, posX{posX_}, posY{posY_}{
+    Pixel(const std::string& Name_, int ID_, int ID_l, int Type_, int posX_, int posY_) : Name{Name_}, ID{ID_}, ID_list{ID_l}, Type{Type_}, posX{posX_}, posY{posY_}{
         /* std::cout<<"Constructor initializare Pixel"<<std::endl;
         std::cout<<"Created Pixel "<< Name <<" With ID "<< ID << " Type " << Type << " And Behaviour " << std::endl; */
     }
-    Pixel(const Pixel& other): Name{other.Name}, ID_list{other.ID_list}, Type{other.Type}, posX{other.posX}, posY{other.posY} {
+    Pixel(const Pixel& other): Name{other.Name}, ID{other.ID}, ID_list{other.ID_list}, Type{other.Type}, posX{other.posX}, posY{other.posY} {
         /* std::cout<<"Constructor copiere Pixel"<<std::endl; */
          //std::cout<<"Copied Pixel "<< Name <<" With ID "<< ID << " Type " << Type << " And Behaviour " << std::endl;
     }
     Pixel& operator=(const Pixel& other) {
         Name = other.Name;
+        ID = other.ID;
         ID_list = other.ID_list;
         Type = other.Type;
         posX = other.posX;
@@ -125,7 +129,7 @@ class Pixel {
         this->SizeX=SizeX_;
         this->SizeY=SizeY_;
         this->has_Border = hasBorder;
-
+        int ID = -1;
         for(int i = 0; i<SizeY; i++){
             std::vector<Pixel> v1;
 
@@ -136,15 +140,16 @@ class Pixel {
         
                 //std::cout<<"test1";
                 if(i==0||i==SizeY-1)
-                v1.push_back({"WALL",1,4,j,i});
+                v1.push_back({"WALL",ID,1,4,j,i});
                 else
                     if(j==0||j==SizeX-1)
-                    v1.push_back({"WALL",1,4,j,i});
-                    else
-                        v1.push_back({"VOID",0,0,j,i});
-                        }
+                    v1.push_back({"WALL",ID,1,4,j,i});
                         else
-                            v1.push_back({"VOID",0,0,j,i});
+                        v1.push_back({"VOID",ID,0,0,j,i});
+                }
+                else
+                v1.push_back({"VOID",ID,0,0,j,i});
+                
             }
             box.push_back(v1); 
         } 
@@ -171,6 +176,7 @@ class Pixel {
 
     void drawBox()
     {
+
         
                 std::cout<<"------------------------"<<std::endl;
         for(int i = 0; i<SizeY; i++)
@@ -207,9 +213,12 @@ class Pixel {
     }
         void SetPixel(Pixel& P, int posX, int posY)
     {   
+    
+        if(box[posY][posX].getID_list()==0)
+        {
         box[posY][posX] = P;
         P.setCoords(posX,posY);
-
+        }
     }
     
         void movePixel (Pixel& P)
@@ -223,7 +232,10 @@ class Pixel {
                 if(box[posY][posX].getID_list() == 2&&box[posY+1][posX].getID_list() == 0)
                 {
                     //std::cout<<"checkBox success"<<std::endl;
-                    box[posY][posX] = {"VOID",0,0,posX,posY};
+                    if(box[posY-1][posX].getType() == 4)
+                    box[posY][posX] = {"VOID",-1,0,0,posX,posY};
+                    else
+                    box[posY][posX] = box[posY-1][posX];
                     posY = posY+1;
                     box[posY][posX] = P;
                     P.setCoords(posX,posY);
@@ -231,30 +243,75 @@ class Pixel {
                 else
                     if(box[posY+1][posX].getID_list() != 0&&box[posY+1][posX].getID_list() != 1)
                     {
-                        std::cout<<"CHECK L/R";
+                        
                         if(box[posY+1][posX+1].getID_list() == 0)
                         {
-                            std::cout<<"check DR";
-                            box[posY][posX] = {"VOID",0,0,posX,posY};
-                            box[posY+1][posX+1] = P;
-                            P.setCoords(posX+1,posY+1);
+                        if(box[posY-1][posX].getType() == 4)
+                        box[posY][posX] = {"VOID",-1,0,0,posX,posY};
+                        else
+                        box[posY][posX] = box[posY-1][posX];
+                        box[posY+1][posX+1] = P;
+                        P.setCoords(posX+1,posY+1);
                         }
                         else if(box[posY+1][posX+1].getID_list() == 2 && box[posY+1][posX-1].getID_list() == 0)
                         {
-                            std::cout<<"check DR";
-                            box[posY][posX] = {"VOID",0,0,posX,posY};
-                            box[posY+1][posX-1] = P;
-                            P.setCoords(posX-1,posY+1);
+                        if(box[posY-1][posX].getType() == 4)
+                        box[posY][posX] = {"VOID",-1,0,0,posX,posY};
+                            else
+                            box[posY][posX] = box[posY-1][posX];
+                        box[posY+1][posX-1] = P;
+                        P.setCoords(posX-1,posY+1);
                         }
                     }
             }
 
         } 
+    void drawPixel(sf::RenderWindow& window)
+    {
+        sf::RectangleShape rect;
+        rect.setSize(sf::Vector2f(10, 10));
+        sf::Vector2f pos(0,0);
+         for(int i = 0; i<SizeY; i++)
+        {
+            for(int j = 0; j<SizeX; j++)
+            {
+                pos.x = j*50;
+                pos.y = i*50;
+                if(box[i][j].getID_list()==0)
+                {
+                sf::RectangleShape rect;
+                rect.setSize(sf::Vector2f(50, 50));
+                rect.setFillColor(sf::Color::Black);
+                rect.setPosition(pos);
+                window.draw(rect);
+                }
+                if(box[i][j].getID_list()==1)
+                {
+                sf::RectangleShape rect;
+                rect.setSize(sf::Vector2f(50, 50));
+                rect.setPosition(pos);
+                window.draw(rect);
+                }
+                if(box[i][j].getID_list()==2)
+                {
+                sf::RectangleShape rect;
+                rect.setSize(sf::Vector2f(50, 50));
+                rect.setFillColor(sf::Color::Yellow);
+                rect.setPosition(pos);
+                window.draw(rect);
+                }
+            }
+            std::cout<<std::endl;
+        }
+    }
             
             
             
 
 };
+
+
+
 
 // buttons for elements
 /* class Elem_Button{
@@ -313,9 +370,10 @@ class Pixel {
 int main()
 {
     //sf::RenderWindow window(sf::VideoMode(800, 600), "SFML window");
-    World w1{8,8,1};
+    World w1{10,10,1};
+    float conX, conY;
     std::cout<<w1;
-    Pixel p1{"DUST",2,1,0,0};
+    Pixel p1{"DUST",0,2,1,0,0};
     /* PixelBehaviour pb1{p1}; */
     bool isActive = 0;
     w1.drawBox();
@@ -341,11 +399,8 @@ sf::RenderWindow window(sf::VideoMode(500, 500), "SFML window");
 window.setFramerateLimit(60);
 // The main loop - ends as soon as the window is closed
 sf::RectangleShape rectangle, bg;
-
-        rectangle.setSize(sf::Vector2f(100, 50));
-        rectangle.setOutlineColor(sf::Color::Red);
-        rectangle.setOutlineThickness(5);
-        rectangle.setPosition(10, 20);
+        rectangle.setSize(sf::Vector2f(50, 50));
+        
 
         bg.setSize(sf::Vector2f(500,500));
         bg.setOutlineColor(sf::Color::Black);
@@ -353,61 +408,72 @@ sf::RectangleShape rectangle, bg;
         bg.setFillColor(sf::Color::Black);
 
 window.draw(bg);
-window.draw(rectangle);
 while (window.isOpen())
 {
+    window.setActive();
    // Event processing
-   window.draw(rectangle);
+   sf::Vector2i pos = sf::Mouse::getPosition(window);
+   sf::Vector2f pos2(0,0);
+   pos2.x = pos.x;
+   pos2.y = pos.y;
+   conX = floor(pos.x/50);
+   conY = floor(pos.y/50);
    sf::Event event;
    while (window.pollEvent(event))
    {
        // Request for closing the window
        if (event.type == sf::Event::Closed)
            window.close();
-   }
+            switch(event.type) {
+        case sf::Event::MouseButtonPressed:
+            if(sf::Mouse::isButtonPressed(sf::Mouse::Right)) {w1.drawBox();}
+            if(sf::Mouse::isButtonPressed(sf::Mouse::Left)) 
+            {
+                sf::RectangleShape rect;
+                w1.SetPixel(p1,conX,conY);
+                rectangle.setPosition(pos2);
+                rect.setSize(sf::Vector2f(50, 50));
+                rect.setPosition(pos2);
+                rect.move(10,1);
+                w1.drawBox();
+                window.draw(rect);
+            }
+            if(event.mouseButton.button == sf::Mouse::Middle) {std::cout << "m\n";}
+            if(event.mouseButton.button == sf::Mouse::Right) 
+            {
+                w1.movePixel(p1);
+                w1.drawBox();
+                //
+                /* bg.setPosition(0,0);
+                isActive = 1;
+                window.draw(rectangle); */
+            }
+            if(sf::Mouse::isButtonPressed(sf::Mouse::XButton2)) {rectangle.setPosition(pos2);}
+            break;
+        default:
+        break;
+        }
+    }
+
 
    // Activate the window for OpenGL rendering
-   window.setActive();
-if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
-{
-    w1.SetPixel(p1,2,2);
-    //w1.SetPixel(p1,2,2);
-  
-    
 
-};
 // draw it
 
-if(sf::Mouse::isButtonPressed(sf::Mouse::Right))
-        {
-            w1.movePixel(p1);
-        }
-
-if(isActive == 0) {
-
-        if(sf::Mouse::isButtonPressed(sf::Mouse::Right))
-        {
-            //w1.movePixel(p1,w1);
-            rectangle.move(10,1);
-            bg.setPosition(0,0);
-            w1.movePixel(p1);
-            //rectangle.setOutlineColor(sf::Color::Blue);
-            isActive = 1;
-            window.draw(rectangle);
-        }
-}
-else
+if(isActive == 1) 
 {
     rectangle.move(0,1);
     window.draw(bg);
     window.draw(rectangle);
-    
+    w1.drawPixel(window);
 }
 
-
+        //std::cout<<conX<<" "<<conY<<std::endl;
+       // std::cout<<pos.x<<" "<<pos.y<<std::endl;
+   w1.movePixel(p1);
    w1.drawBox();
+   w1.drawPixel(window);
    //window.draw(rectangle);
    window.display();
 }
-    
 }
