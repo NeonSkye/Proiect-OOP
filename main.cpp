@@ -269,7 +269,7 @@ class Pixel {
     void drawPixel(sf::RenderWindow& window)
     {
         sf::RectangleShape rect;
-        rect.setSize(sf::Vector2f(10, 10));
+        rect.setSize(sf::Vector2f(50, 50));
         sf::Vector2f pos(0,0);
          for(int i = 0; i<SizeY; i++)
         {
@@ -279,23 +279,19 @@ class Pixel {
                 pos.y = i*50;
                 if(box[i][j].getID_list()==0)
                 {
-                sf::RectangleShape rect;
-                rect.setSize(sf::Vector2f(50, 50));
+                
                 rect.setFillColor(sf::Color::Black);
                 rect.setPosition(pos);
                 window.draw(rect);
                 }
                 if(box[i][j].getID_list()==1)
                 {
-                sf::RectangleShape rect;
-                rect.setSize(sf::Vector2f(50, 50));
+                rect.setFillColor(sf::Color::White);
                 rect.setPosition(pos);
                 window.draw(rect);
                 }
                 if(box[i][j].getID_list()==2)
                 {
-                sf::RectangleShape rect;
-                rect.setSize(sf::Vector2f(50, 50));
                 rect.setFillColor(sf::Color::Yellow);
                 rect.setPosition(pos);
                 window.draw(rect);
