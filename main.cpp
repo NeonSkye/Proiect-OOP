@@ -367,7 +367,7 @@ int main()
 {
     //sf::RenderWindow window(sf::VideoMode(800, 600), "SFML window");
     World w1{10,10,1};
-    float conX, conY;
+    
     std::cout<<w1;
     Pixel p1{"DUST",0,2,1,0,0};
     /* PixelBehaviour pb1{p1}; */
@@ -406,6 +406,7 @@ sf::RectangleShape rectangle, bg;
 window.draw(bg);
 while (window.isOpen())
 {
+    float conX, conY;
     window.setActive();
    // Event processing
    sf::Vector2i pos = sf::Mouse::getPosition(window);
