@@ -1,6 +1,8 @@
 #include<iostream>
 #include<string>
 #include<utility>
+#include "Pixel.h"
+#include "World.h"
 //#include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
 #include<SFML/System.hpp>
@@ -32,282 +34,8 @@ PIXEL TYPES
 //TO DO: FIGURE OUT HOW TO TRANSLATE MATRIX TO GRAPHICS
 //SIMULATION ENGINE AFTER
 
-class Pixel {
-    private:
-    std::string Name;
-/*     sf::RectangleShape px;
-    px.setSize(sf::Vector2f(10, 10)); */
-    //sf::RectangleShape px;
-    //sf::Color colour(0,0,0,255);
-    int ID;
-    int ID_list;
-    
-    int Type;
-    int posX, posY;
-    //int x, y;
-    /*float Weight;
-    int Density;
-    int Temp_init;
-    int colour; //change to sfml colour 
-    bool Can_burn;
-    bool Can_melt;
-    bool Can_ignite; */
-    //PixelBehaviour PB{this->Type, this->Weight, this->Temp_init};
-    public:
-    // to add PixelBehaviour to Pixel constructor
-/*     int Color(int r, int g, int b, int a)
-    {
-        &colour.r=r;
-        &colour.g=g;
-        &colour.b=b;
-        &colour.a=a;
-    } */
-    int getID_list()
-    {
-        return ID_list;
-    }
-    int getType()
-    {
-        return Type;
-    }
 
-    void setCoords(int X, int Y)
-    {
-       posX = X;
-       posY = Y;
-    }
-    int getposX()
-    {
-        return posX;
-    }
-    int getposY()
-    {
-        return posY;
-    }
-    
-    ~Pixel()
-    {
-        /* std::cout <<"Destructor Pixel"<<std::endl; */
-    }
-    friend std::ostream& operator<<(std::ostream& os, const Pixel& px){
-        os << "Type " << px.Type << " ID_list " << px.ID_list << "\n";
-        return os;
-    }
-    Pixel(const std::string& Name_, int ID_, int ID_l, int Type_, int posX_, int posY_) : Name{Name_}, ID{ID_}, ID_list{ID_l}, Type{Type_}, posX{posX_}, posY{posY_}{
-        /* std::cout<<"Constructor initializare Pixel"<<std::endl;
-        std::cout<<"Created Pixel "<< Name <<" With ID "<< ID << " Type " << Type << " And Behaviour " << std::endl; */
-    }
-    Pixel(const Pixel& other): Name{other.Name}, ID{other.ID}, ID_list{other.ID_list}, Type{other.Type}, posX{other.posX}, posY{other.posY} {
-        /* std::cout<<"Constructor copiere Pixel"<<std::endl; */
-         //std::cout<<"Copied Pixel "<< Name <<" With ID "<< ID << " Type " << Type << " And Behaviour " << std::endl;
-    }
-    Pixel& operator=(const Pixel& other) {
-        Name = other.Name;
-        ID = other.ID;
-        ID_list = other.ID_list;
-        Type = other.Type;
-        posX = other.posX;
-        posY = other.posY;
-        /* std::cout<<"Operator= copiere Pixel"<<std::endl; */
-        return *this;
-    }
-}; 
-
- class World{
-
-    private:
-    std::vector<std::vector<Pixel>> box;
-   
-    int SizeX;
-    int SizeY;
-    bool has_Border;
-    //int Gravity;
-    public:
-    void Create(int SizeX_, int SizeY_, bool hasBorder)
-    {  
-        //std::cout<<"Create World "<<SizeX <<" x "<<SizeY<<std::endl; 
-        this->SizeX=SizeX_;
-        this->SizeY=SizeY_;
-        this->has_Border = hasBorder;
-        int ID = -1;
-        for(int i = 0; i<SizeY; i++){
-            std::vector<Pixel> v1;
-
-            for(int j = 0; j<SizeX; j++)
-            {
-                if(hasBorder==1)
-                {
-        
-                //std::cout<<"test1";
-                if(i==0||i==SizeY-1)
-                v1.push_back({"WALL",ID,1,4,j,i});
-                else
-                    if(j==0||j==SizeX-1)
-                    v1.push_back({"WALL",ID,1,4,j,i});
-                        else
-                        v1.push_back({"VOID",ID,0,0,j,i});
-                }
-                else
-                v1.push_back({"VOID",ID,0,0,j,i});
-                
-            }
-            box.push_back(v1); 
-        } 
-    }
-    World(int X_, int Y_, bool hasBorder) {
-        Create(X_,Y_,hasBorder);
-        }
-    
-    
-/*     void setBox(std::vector<std::vector<Pixel>> box_)
-    {
-        for(int i = 0; i<SizeY; i++){
-            std::vector<Pixel> v1;
-
-            for(int j = 0; j<SizeX; j++)
-            {
-                v1.push_back(box_[i][j]);
-            }
-            this->box.push_back(v1); 
-        } 
-    } */
-
-
-
-    void drawBox()
-    {
-
-        
-                std::cout<<"------------------------"<<std::endl;
-        for(int i = 0; i<SizeY; i++)
-        {
-            for(int j = 0; j<SizeX; j++)
-            {
-               std::cout<<box[i][j].getID_list()<<" ";
-            }
-            std::cout<<std::endl;
-        }
-        
-                std::cout<<"------------------------"<<std::endl;
-    }
-/*     std::vector<std::vector<Pixel>> getBox()
-    {
-        return box;
-    } */
-    /* int getGravity()
-    {
-        return Gravity;
-    }
-     int getSizeX()
-    {
-        return SizeX;
-    }
-    int getSizeY()
-    {
-        return SizeY;
-    } */
-    friend std::ostream& operator<<(std::ostream& os, const World& w)
-    {
-        os<<"Size World " << w.SizeX << " x " <<w.SizeY <<"\n";
-        return os;
-    }
-        void SetPixel(Pixel& P, int posX, int posY)
-    {   
-    
-        if(box[posY][posX].getID_list()==0)
-        {
-        box[posY][posX] = P;
-        P.setCoords(posX,posY);
-        }
-    }
-    
-        void movePixel (Pixel& P)
-        {
-            //std::cout<<"test GetPos"<< P.getposX() << P.getposY() << std::endl;
-            int posX = P.getposX();
-            int posY = P.getposY();
-            if(P.getType()==1)
-            {
-                //std::cout<<"getType success"<< posX << posY << std::endl;
-                if(box[posY][posX].getID_list() == 2&&box[posY+1][posX].getID_list() == 0)
-                {
-                    //std::cout<<"checkBox success"<<std::endl;
-                    if(box[posY-1][posX].getType() == 4)
-                    box[posY][posX] = {"VOID",-1,0,0,posX,posY};
-                    else
-                    box[posY][posX] = box[posY-1][posX];
-                    posY = posY+1;
-                    box[posY][posX] = P;
-                    P.setCoords(posX,posY);
-                }
-                else
-                    if(box[posY+1][posX].getID_list() != 0&&box[posY+1][posX].getID_list() != 1)
-                    {
-                        
-                        if(box[posY+1][posX+1].getID_list() == 0)
-                        {
-                        if(box[posY-1][posX].getType() == 4)
-                        box[posY][posX] = {"VOID",-1,0,0,posX,posY};
-                        else
-                        box[posY][posX] = box[posY-1][posX];
-                        box[posY+1][posX+1] = P;
-                        P.setCoords(posX+1,posY+1);
-                        }
-                        else if(box[posY+1][posX+1].getID_list() == 2 && box[posY+1][posX-1].getID_list() == 0)
-                        {
-                        if(box[posY-1][posX].getType() == 4)
-                        box[posY][posX] = {"VOID",-1,0,0,posX,posY};
-                            else
-                            box[posY][posX] = box[posY-1][posX];
-                        box[posY+1][posX-1] = P;
-                        P.setCoords(posX-1,posY+1);
-                        }
-                    }
-            }
-
-        } 
-    void drawPixel(sf::RenderWindow& window)
-    {
-        sf::RectangleShape rect;
-        rect.setSize(sf::Vector2f(50, 50));
-        sf::Vector2f pos(0,0);
-         for(int i = 0; i<SizeY; i++)
-        {
-            for(int j = 0; j<SizeX; j++)
-            {
-                pos.x = j*50;
-                pos.y = i*50;
-                if(box[i][j].getID_list()==0)
-                {
-                
-                rect.setFillColor(sf::Color::Black);
-                rect.setPosition(pos);
-                window.draw(rect);
-                }
-                if(box[i][j].getID_list()==1)
-                {
-                rect.setFillColor(sf::Color::White);
-                rect.setPosition(pos);
-                window.draw(rect);
-                }
-                if(box[i][j].getID_list()==2)
-                {
-                rect.setFillColor(sf::Color::Yellow);
-                rect.setPosition(pos);
-                window.draw(rect);
-                }
-            }
-            std::cout<<std::endl;
-        }
-    }
-            
-            
-            
-
-};
-
-
-
+ 
 
 // buttons for elements
 /* class Elem_Button{
@@ -354,46 +82,21 @@ class Pixel {
         os<<"Type PB " << pxb.pixel << "\n";
         return os;
     }
-
-
     void TransformPixel() {}
-
-
 }; */
 
 
 
 int main()
 {
-    //sf::RenderWindow window(sf::VideoMode(800, 600), "SFML window");
     World w1{10,10,1};
     
     std::cout<<w1;
     Pixel p1{"DUST",0,2,1,0,0};
-    /* PixelBehaviour pb1{p1}; */
     bool isActive = 0;
     w1.drawBox();
-    /* std::cout<<w1;      Pixel p1{"FIRST",1,2};
-    Pixel p6{"SECOND",2,3};
-     std::cout<<p1; 
-    PixelBehaviour pb1{1,2,1};
-     std::cout<<pb1; 
-    Pixel p2{p1};
-    Pixel p3 = p1;
-    p2 = p3;
-    Elem_Button e1{p1}; 
-    std::cout<<e1; 
-     std::cout<<"6-------------6"<<std::endl; */
-    //w1.SetPixel(p1.getID(),0,0,p1.getType());
-    //w1.getWorld();
-    //w1.getWorld();
-   // w1.SpawnPixel(TYPE,posX,posY,LOC);
-   // w1.Update();
 sf::RenderWindow window(sf::VideoMode(500, 500), "SFML window");
-/* sf::Vector2<Pixel> box; */
-// Limit the framerate to 60 frames per second (this step is optional)
 window.setFramerateLimit(60);
-// The main loop - ends as soon as the window is closed
 sf::RectangleShape rectangle, bg;
         rectangle.setSize(sf::Vector2f(50, 50));
         
