@@ -17,8 +17,8 @@ Controls: Left click to place sand under mouse cursor. (for now)
 - [x] cât mai multe `const`
 - [x] implementarea a minim 3 funcții membru publice pentru funcționalități specifice temei alese
 - [x] scenariu de utilizare a claselor definite: crearea de obiecte și apelarea funcțiilor membru publice în main
-- [ ] tag de `git`: de exemplu `v0.1`
-- [ ] serviciu de integrare continuă (CI); exemplu: GitHub Actions
+- [x] tag de `git`: de exemplu `v0.1`
+- [x] serviciu de integrare continuă (CI); exemplu: GitHub Actions
 
 ## Tema 2
 
