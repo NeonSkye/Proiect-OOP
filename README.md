@@ -3,7 +3,10 @@
 ### ParticleSim++
 Particle simulator!
 
-Controls: Left click to place sand under mouse cursor. (for now)
+Controls: Left click to place selected pixel.
+Middle click to change selected pixel.
+Spacebar to pause and unpause.
+
 
 ## Tema 1
 
