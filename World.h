@@ -8,7 +8,7 @@
 class World{
 
     private:
-    std::vector<std::vector<Pixel>> box;
+    std::vector<std::vector<Pixel*>> box;
    
     int SizeX;
     int SizeY;
@@ -35,31 +35,16 @@ class World{
 
 
     void drawBox();
-/*     std::vector<std::vector<Pixel>> getBox()
-    {
-        return box;
-    } */
-    /* int getGravity()
-    {
-        return Gravity;
-    }
-     int getSizeX()
-    {
-        return SizeX;
-    }
-    int getSizeY()
-    {
-        return SizeY;
-    } */
+    Pixel* getBox(float conX, float conY);
     friend std::ostream& operator<<(std::ostream& os, const World& w);
-    void SetPixel(Pixel& P, int posX, int posY);
-    void movePixel (Pixel& P);
-    void drawPixel(sf::RenderWindow& window);
+    void SetPixel(Pixel* P, int posX, int posY);
+    void moveWorld();
+    
+   void drawPixel(sf::RenderWindow& window);
             
             
             
 
 };
-
 
 #endif

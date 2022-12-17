@@ -6,9 +6,8 @@ void World::Create(int SizeX_, int SizeY_, bool hasBorder)
         this->SizeX=SizeX_;
         this->SizeY=SizeY_;
         this->has_Border = hasBorder;
-        int ID = -1;
         for(int i = 0; i<SizeY; i++){
-            std::vector<Pixel> v1;
+            std::vector<Pixel*> v1;
 
             for(int j = 0; j<SizeX; j++)
             {
@@ -17,15 +16,15 @@ void World::Create(int SizeX_, int SizeY_, bool hasBorder)
         
                 //std::cout<<"test1";
                 if(i==0||i==SizeY-1)
-                v1.push_back({"WALL",ID,1,4,j,i});
+                v1.push_back(new Pixel {"WALL",1,4,j,i});
                 else
                     if(j==0||j==SizeX-1)
-                    v1.push_back({"WALL",ID,1,4,j,i});
+                    v1.push_back(new Pixel {"WALL",1,4,j,i});
                         else
-                        v1.push_back({"VOID",ID,0,0,j,i});
+                        v1.push_back(new Pixel {"VOID",0,0,j,i});
                 }
                 else
-                v1.push_back({"VOID",ID,0,0,j,i});
+                v1.push_back(new Pixel {"VOID",0,0,j,i});
                 
             }
             box.push_back(v1); 
@@ -35,7 +34,7 @@ void World::Create(int SizeX_, int SizeY_, bool hasBorder)
 World::World(int X_, int Y_, bool hasBorder) 
         
         {
-        World::Create(X_,Y_,hasBorder);
+        Create(X_,Y_,hasBorder);
         }
 
 
@@ -49,91 +48,24 @@ void World::drawBox()
         {
             for(int j = 0; j<SizeX; j++)
             {
-               std::cout<<box[i][j].getID_list()<<" ";
+               std::cout<<box[i][j]->getID_list()<<" ";
             }
             std::cout<<std::endl;
         }
         
                 std::cout<<"------------------------"<<std::endl;
     }
-/*     std::vector<std::vector<Pixel>> getBox()
+    Pixel* World::getBox(float conX, float conY)
     {
-        return box;
-    } */
-    /* int getGravity()
-    {
-        return Gravity;
+        return box[conY][conX];
     }
-     int getSizeX()
-    {
-        return SizeX;
-    }
-    int getSizeY()
-    {
-        return SizeY;
-    } */
+
 
    std::ostream& operator<<(std::ostream& os, const World& w)
     {
         os<<"Size World " << w.SizeX << " x " <<w.SizeY <<"\n";
         return os;
     }
-        void World::SetPixel(Pixel& P, int posX, int posY)
-    {   
-    
-        if(box[posY][posX].getID_list()==0)
-        {
-        box[posY][posX] = P;
-        P.setCoords(posX,posY);
-        }
-    }
-    
-        void World::movePixel (Pixel& P)
-        {
-            //std::cout<<"test GetPos"<< P.getposX() << P.getposY() << std::endl;
-            int posX = P.getposX();
-            int posY = P.getposY();
-            if(P.getType()==1)
-            {
-                //std::cout<<"getType success"<< posX << posY << std::endl;
-                if(box[posY][posX].getID_list() == 2&&box[posY+1][posX].getID_list() == 0)
-                {
-                    //std::cout<<"checkBox success"<<std::endl;
-                    if(box[posY-1][posX].getType() == 4)
-                    box[posY][posX] = {"VOID",-1,0,0,posX,posY};
-                    else
-                    box[posY][posX] = box[posY-1][posX];
-                    posY = posY+1;
-                    box[posY][posX] = P;
-                    P.setCoords(posX,posY);
-                }
-                else
-                    if(box[posY+1][posX].getID_list() != 0&&box[posY+1][posX].getID_list() != 1)
-                    {
-                        
-                        if(box[posY+1][posX+1].getID_list() == 0)
-                        {
-                        if(box[posY-1][posX].getType() == 4)
-                        box[posY][posX] = {"VOID",-1,0,0,posX,posY};
-                        else
-                        box[posY][posX] = box[posY-1][posX];
-                        box[posY+1][posX+1] = P;
-                        P.setCoords(posX+1,posY+1);
-                        }
-                        else if(box[posY+1][posX+1].getID_list() == 2 && box[posY+1][posX-1].getID_list() == 0)
-                        {
-                        if(box[posY-1][posX].getType() == 4)
-                        box[posY][posX] = {"VOID",-1,0,0,posX,posY};
-                            else
-                            box[posY][posX] = box[posY-1][posX];
-                        box[posY+1][posX-1] = P;
-                        P.setCoords(posX-1,posY+1);
-                        }
-                    }
-            }
-
-        }
-
     void World::drawPixel(sf::RenderWindow& window)
     {
         sf::RectangleShape rect;
@@ -145,22 +77,33 @@ void World::drawBox()
             {
                 pos.x = j*50;
                 pos.y = i*50;
-                if(box[i][j].getID_list()==0)
+                if(box[i][j]->getID_list()==0)
                 {
-                
                 rect.setFillColor(sf::Color::Black);
                 rect.setPosition(pos);
                 window.draw(rect);
                 }
-                if(box[i][j].getID_list()==1)
+                if(box[i][j]->getID_list()==1)
                 {
                 rect.setFillColor(sf::Color::White);
                 rect.setPosition(pos);
                 window.draw(rect);
                 }
-                if(box[i][j].getID_list()==2)
+                if(box[i][j]->getID_list()==2)
                 {
-                rect.setFillColor(sf::Color::Yellow);
+                rect.setFillColor(sf::Color(255,190,90,255));
+                rect.setPosition(pos);
+                window.draw(rect);
+                }
+                if(box[i][j]->getID_list()==3)
+                {
+                rect.setFillColor(sf::Color(40,80,175,255));
+                rect.setPosition(pos);
+                window.draw(rect);
+                }
+                if(box[i][j]->getID_list()==4)
+                {
+                rect.setFillColor(sf::Color(125,125,125,255));
                 rect.setPosition(pos);
                 window.draw(rect);
                 }
@@ -169,5 +112,43 @@ void World::drawBox()
         }
     }
             
+        void World::SetPixel(Pixel* P, int posX, int posY)
+    {   
+    
+        if(box[posY][posX]->getID_list()==0)
+        {
+        box[posY][posX] = P;
+        P->setCoords(posX,posY);
+        P->setID(1);
+        //box[posY][posX]->setCoords(posX,posY);
+        }
+        if(P->getID_list()==0 && box[posY][posX]->getID_list()!=1)
+        {
+        box[posY][posX] = P;
+        P->setCoords(posX,posY);
+        P->setID(-1);
+        } 
+        
+    }
+
+    void World::moveWorld()
+    {
+        //Pixel aux{"VOID",0,0,0,0,0};
+         for(int i = 1; i<SizeY-1; i++)
+        {
+            for(int j = 1; j<SizeX-1; j++)
+            {   
+
+                box[i][j]->setCoords(j,i);
+                box[i][j]->movePixel(box);
+                
+                   
+            }
+        }
+        
+    }
+    
+    
+
             
             
