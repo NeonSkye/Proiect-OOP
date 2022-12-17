@@ -83,101 +83,95 @@ int Pixel::getID()
         return *this;
     }
     int Pixel::ID = 0;
-    void Powder::setCoords(int X, int Y)
-    {
-       this->posX = X;
-       this->posY = Y;
-    }
+
      void Powder::movePixel(std::vector<std::vector<Pixel*>>& box)
         {
-            
-            int posX = this->posX;
-            int posY = this->posY;
-            Pixel *P = box[posY][posX];
-            P->setCoords(posX,posY);
-            if(box[posY][posX]->getID_list() == 2&&box[posY+1][posX]->getID_list() == 0)
+            int move = rand() % 2;
+            int posX_ = this->posX;
+            int posY_ = this->posY;
+            Pixel *P = box[posY_][posX_];
+            //P->setCoords(posX_,posY_);
+            if(box[posY_][posX_]->getID_list() == 2&&box[posY_+1][posX_]->getID_list() == 0)
             {
-                box[posY+1][posX] = P;
-                box[posY][posX] = new Pixel {"VOID",0,0,posX,posY};
+                std::cout<<"test"<<std::endl;
+                box[posY_+1][posX_] = P;
+                box[posY_][posX_] = new Pixel {"VOID",0,0,posX_,posY_};
                 
-                P->setCoords(posX,posY+1);
+                P->setCoords(posX_,posY_+1);
 
             }
-            if(box[posY][posX]->getID_list() == 2&&box[posY+1][posX]->getID_list() == 3)
+            if(box[posY_][posX_]->getID_list() == 2&&box[posY_+1][posX_]->getID_list() == 3)
             {
-                box[posY+1][posX] = P;
-                box[posY][posX] = new Liquid {"WATR",3,2,posX,posY};
+                box[posY_+1][posX_] = P;
+                box[posY_][posX_] = new Liquid {"WATR",3,2,posX_,posY_};
                 
-                P->setCoords(posX,posY+1);
+                P->setCoords(posX_,posY_+1);
 
             }
-             if(box[posY][posX]->getID_list() == 2&&box[posY+1][posX]->getID_list() != 1)
+             if(box[posY_][posX_]->getID_list() == 2&&box[posY_+1][posX_]->getID_list() != 1)
             {
-                if(box[posY+1][posX+1]->getID_list()==0)
+                if(move==1)
+                { 
+                if(box[posY_+1][posX_+1]->getID_list()==0)
                     {
-                    box[posY+1][posX+1]=P;
-                    box[posY][posX] = new  Pixel {"VOID",0,0,posX,posY};
-                     P->setCoords(posX+1,posY+1);
+                    box[posY_+1][posX_+1]=P;
+                    box[posY_][posX_] = new  Pixel {"VOID",0,0,posX_,posY_};
+                     P->setCoords(posX_+1,posY_+1);
                     }
-                else
-                    
-                if(box[posY+1][posX+1]->getID_list()!=0 && box[posY+1][posX-1]->getID_list() == 0)
+                }
+                else  
+                if(box[posY_+1][posX_-1]->getID_list()==0)
                     {
-                    box[posY+1][posX-1]=P;
-                    box[posY][posX] =  new  Pixel {"VOID",0,0,posX,posY};
-                        P->setCoords(posX-1,posY+1);
+                    box[posY_+1][posX_-1]=P;
+                    box[posY_][posX_] = new  Pixel {"VOID",0,0,posX_,posY_};
+                     P->setCoords(posX_+1,posY_-1);
                     }
+       
                     
             }
             
         } 
-    void Liquid::setCoords(int X, int Y)
-    {
-       this->posX = X;
-       this->posY = Y;
-    }
+
     void Liquid::movePixel(std::vector<std::vector<Pixel*>>& box) 
    
         { 
             int move = rand() % 2;
-            int posX = this->posX;
-            int posY = this->posY;
-            Pixel *P = box[posY][posX];
-            P->setCoords(posX,posY);
-                if(box[posY][posX]->getID_list() == 3&&box[posY+1][posX]->getID_list() == 0)
+            int posX_ = this->posX;
+            int posY_ = this->posY;
+            Pixel *P = box[posY_][posX_];
+            //P->setCoords(posX_,posY_);
+                if(box[posY_+1][posX_]->getID_list() == 0)
             {
-                box[posY+1][posX] = P;
-                box[posY][posX] = new Pixel {"VOID",0,0,posX,posY};
+                box[posY_+1][posX_] = P;
+                box[posY_][posX_] = new Pixel {"VOID",0,0,posX_,posY_};
 
-                P->setCoords(posX,posY+1);
+                P->setCoords(posX_,posY_+1);
             }
-                if(box[posY][posX]->getID_list() == 3&&box[posY+1][posX]->getID_list() != 0)
+                if(box[posY_][posX_]->getID_list() == 3&&box[posY_+1][posX_]->getID_list() != 0)
             {
                 if(move==1)
                 { 
-                    if(box[posY][posX+1]->getID_list()==0)
+                    if(box[posY_][posX_+1]->getID_list()==0)
                         {
-                        box[posY][posX+1] = P;
-                        box[posY][posX] = new Pixel {"VOID",0,0,posX,posY};
+                        
+                        box[posY_][posX_+1] = P;
+                        box[posY_][posX_] = new Pixel {"VOID",0,0,posX_,posY_};
                         }
-                    P->setCoords(posX+1,posY);
+                    P->setCoords(posX_+1,posY_);
                 }
                 else
                 {   
-                    if(box[posY][posX-1]->getID_list()==0)
+                    if(box[posY_][posX_-1]->getID_list()==0)
                         {
-                        box[posY][posX-1] = P;
-                        box[posY][posX] = new Pixel {"VOID",0,0,posX,posY};
+                            
+                        box[posY_][posX_-1] = P;
+                        box[posY_][posX_] = new Pixel {"VOID",0,0,posX_,posY_};
                         }
-                    P->setCoords(posX-1,posY);
+                    P->setCoords(posX_-1,posY_);
                 }
             }
            
             
         } 
-        void Solid::setCoords(int X, int Y)
-    {
-       this->posX = X;
-       this->posY = Y;
-    }
+
    

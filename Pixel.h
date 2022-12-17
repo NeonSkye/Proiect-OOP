@@ -11,11 +11,13 @@ class Pixel {
     static int ID;
     int ID_list;
     int Type;
+    protected:
     int posX, posY;
     public:
+    void setCoords(int X, int Y);
     int getID_list();
     int getType();
-    virtual void setCoords(int X, int Y);
+    
     int getposX();
     int getposY();
     static void setID(int N);
@@ -39,35 +41,24 @@ class Powder : public Pixel {
     std::string Name;
     int ID_list;
     static int Type;
-    int posX, posY;
     using Pixel::Pixel;
     public:
-    virtual void setCoords(int X, int Y) override;
     virtual void movePixel (std::vector<std::vector<Pixel*>>& box) override;
 };
 
 class Liquid : public Pixel {
     private:
     std::string Name;
-    int ID_list;
-    int Type;
-    int posX, posY;
     using Pixel::Pixel;
 
     public:
-    virtual void setCoords(int X, int Y) override;
     virtual void movePixel (std::vector<std::vector<Pixel*>>& box) override;
 };
 
 class Solid : public Pixel {
     private:
     std::string Name;
-    int ID_list;
-    int Type;
-    int posX, posY;
     using Pixel::Pixel;
-    public:
-    virtual void setCoords(int X, int Y) override;
 };
 
 #endif

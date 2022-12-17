@@ -115,7 +115,7 @@ void World::drawBox()
         void World::SetPixel(Pixel* P, int posX, int posY)
     {   
     
-        if(box[posY][posX]->getID_list()==0)
+        if(box[posY][posX]->getID_list()==0 || box[posY][posX]->getID_list()==-1)
         {
         box[posY][posX] = P;
         P->setCoords(posX,posY);
@@ -127,7 +127,8 @@ void World::drawBox()
         box[posY][posX] = P;
         P->setCoords(posX,posY);
         P->setID(-1);
-        } 
+        }
+
         
     }
 
@@ -141,8 +142,6 @@ void World::drawBox()
 
                 box[i][j]->setCoords(j,i);
                 box[i][j]->movePixel(box);
-                
-                   
             }
         }
         
