@@ -35,40 +35,9 @@ int Pixel::getID()
     }
     void Pixel::movePixel(std::vector<std::vector<Pixel*>>& box)
         {
-            box[posY][posX] = box[posY][posX];
-        /*     
-            
-            
-            int posX = this->posX;
-            int posY = this->posY;
-            Pixel *P = box[posY][posX];
-            if(box[posY][posX]->getID_list() == 2&&box[posY+1][posX]->getID_list() == 0)
-            {
-                box[posY+1][posX] = P;
-                box[posY][posX] = new Pixel {"VOID",-1,0,0,posX,posY};
-                
-                P->setCoords(posX,posY+1);
-
-            }
-             if(box[posY][posX]->getID_list() == 2&&box[posY+1][posX]->getID_list() != 1)
-            {
-                if(box[posY+1][posX+1]->getID_list()==0)
-                {
-                    box[posY+1][posX+1]=P;
-                    box[posY][posX] = new  Pixel {"VOID",-1,0,0,posX,posY};
-                     P->setCoords(posX+1,posY+1);
-                    
-                }
-                else
-                    if(box[posY+1][posX+1]->getID_list()!=0 && box[posY+1][posX-1]->getID_list() == 0)
-                    {
-                    box[posY+1][posX-1]=P;
-                    box[posY][posX] =  new  Pixel {"VOID",-1,0,0,posX,posY};
-                        P->setCoords(posX-1,posY+1);
-                    }
-                    
-            } */
-        
+        int i = 1;
+        if(i==0)
+        std::cout<<box[posY][posX];
         } 
 
     Pixel::Pixel(const std::string& Name_, int ID_l, int Type_, int posX_, int posY_) : Name{Name_}, ID_list{ID_l}, Type{Type_}, posX{posX_}, posY{posY_}{
