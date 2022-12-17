@@ -35,7 +35,7 @@ class World{
 
 
     void drawBox();
-    Pixel* getBox(float conX, float conY);
+ /*    Pixel* getBox(float conX, float conY); */
     friend std::ostream& operator<<(std::ostream& os, const World& w);
     void SetPixel(Pixel* P, int posX, int posY);
     void moveWorld();

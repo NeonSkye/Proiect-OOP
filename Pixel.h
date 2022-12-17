@@ -16,10 +16,10 @@ class Pixel {
     public:
     void setCoords(int X, int Y);
     int getID_list();
-    int getType();
+ /*    int getType(); */
     
-    int getposX();
-    int getposY();
+  /*   int getposX();
+    int getposY(); */
     static void setID(int N);
     static int getID();
     virtual void movePixel (std::vector<std::vector<Pixel*>>& box);

@@ -8,6 +8,10 @@
 #include<SFML/System.hpp>
 #include<cmath>
 #include<thread>
+#ifdef __linux__
+#include <X11/Xlib.h>
+#endif
+
 
 /*vx, vy affected by pixel weight*/
 
@@ -61,6 +65,9 @@ PIXEL TYPES
 
 int main()
 {
+    #ifdef __linux__
+    XInitThreads();
+    #endif
     World w1{20,20,1 };
     std::thread tr;
     
@@ -242,6 +249,7 @@ while (window.isOpen())
    window.display();
    
    std::cout<<"SELECTED: "<<list[i]<<std::endl;
+   std::cout<<"PIXEL COUNT: "<<p0->getID()<<std::endl;
 }
 }
 

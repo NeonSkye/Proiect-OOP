@@ -5,18 +5,18 @@ int Pixel::getID_list()
     return ID_list;
     }
 
-int Pixel::getType()
+/* int Pixel::getType()
      {
         return Type;
     }
-
+ */
 void Pixel::setCoords(int X, int Y)
     {
        this->posX = X;
        this->posY = Y;
     }
 
-int Pixel::getposX()
+/* int Pixel::getposX()
     {
         return posX;
     }
@@ -24,7 +24,7 @@ int Pixel::getposX()
 int Pixel::getposY()
     {
         return posY;
-    }
+    } */
  void Pixel::setID(int N)
     {
         ID = ID+N;

@@ -55,11 +55,11 @@ void World::drawBox()
         
                 std::cout<<"------------------------"<<std::endl;
     }
-    Pixel* World::getBox(float conX, float conY)
+/*     Pixel* World::getBox(float conX, float conY)
     {
         return box[conY][conX];
     }
-
+ */
 
    std::ostream& operator<<(std::ostream& os, const World& w)
     {

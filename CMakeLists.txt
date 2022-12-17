@@ -71,8 +71,12 @@ sfml_set_custom_stdlib(sfml-graphics)
 
 # external dependencies with find_package
 
-# find_package(Threads REQUIRED)
-
+ find_package(Threads REQUIRED)
+find_package(Threads REQUIRED)
+if(APPLE)
+elseif(UNIX)
+find_package(X11)
+endif()
 ###############################################################################
 
 # NOTE: update executable name in .github/workflows/cmake.yml when changing name here
@@ -97,7 +101,7 @@ if(MSVC)
       target_compile_options(${PROJECT_NAME} PRIVATE /WX)
     endif()
 else()
-    target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -pedantic)
+    target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -pedantic -g)
     if(WARNINGS_AS_ERRORS)
       target_compile_options(${PROJECT_NAME} PRIVATE -Werror)
     endif()
@@ -147,7 +151,11 @@ endif()
 #target_include_directories(${PROJECT_NAME} SYSTEM PRIVATE ext/<SomeHppLib>/include)
 target_include_directories(${PROJECT_NAME} SYSTEM PRIVATE ${SFML_SOURCE_DIR}/include)
 target_link_directories(${PROJECT_NAME} PRIVATE ${SFML_BINARY_DIR}/lib)
-target_link_libraries(${PROJECT_NAME} sfml-graphics sfml-window sfml-system)
+target_link_libraries(${PROJECT_NAME} sfml-graphics sfml-window sfml-system Threads::Threads)
+if(APPLE)
+elseif(UNIX)
+target_link_libraries(${PROJECT_NAME} sfml-graphics sfml-window sfml-system X11)
+endif()
 
 ###############################################################################
 
