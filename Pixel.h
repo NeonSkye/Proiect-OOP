@@ -39,7 +39,6 @@ class Pixel {
 class Powder : public Pixel {
     private:
     std::string Name;
-    int ID_list;
     static int Type;
     using Pixel::Pixel;
     public:

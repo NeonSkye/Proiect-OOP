@@ -93,7 +93,7 @@ int Pixel::getID()
             //P->setCoords(posX_,posY_);
             if(box[posY_][posX_]->getID_list() == 2&&box[posY_+1][posX_]->getID_list() == 0)
             {
-                std::cout<<"test"<<std::endl;
+
                 box[posY_+1][posX_] = P;
                 box[posY_][posX_] = new Pixel {"VOID",0,0,posX_,posY_};
                 
