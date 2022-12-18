@@ -149,7 +149,7 @@ void World::drawBox()
             auto& pd = dynamic_cast<Solid&>(*P);
             pd.transformPixel(P,box);
         } catch(std::bad_cast& err){
-            
+            err.what();
         }
 
     
