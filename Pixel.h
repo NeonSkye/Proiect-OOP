@@ -34,7 +34,7 @@ class Pixel {
     Pixel(const std::string& Name_, int ID_l, int Type_, int posX_, int posY_);
     Pixel(const Pixel& other);
     Pixel& operator=(const Pixel& other);
-    ~Pixel() {}
+    ~Pixel() = default;
 }; 
 
 
