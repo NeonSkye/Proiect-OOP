@@ -31,7 +31,7 @@ F when paused to go to next frame.
 - [x] moșteniri
   - [x] funcții virtuale (pure) apelate prin pointeri de bază, constructori virtuali (clone)
   - [x] apelarea constructorului din clasa de bază 
-  - [ ] smart pointers
+  - [x] smart pointers
   - [ ] `dynamic_cast`
 - [x] suprascris cc/op= pentru copieri/atribuiri corecte, copy and swap
 - [ ] excepții
