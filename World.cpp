@@ -79,41 +79,41 @@ void World::drawBox()
                 pos.x = j*50;
                 pos.y = i*50;
                 if(box[i][j]->getID_list()==0)
-                {
-                rect.setFillColor(sf::Color::Black);
-                rect.setPosition(pos);
-                window.draw(rect);
-                }
+                    {
+                        rect.setFillColor(sf::Color::Black);
+                        rect.setPosition(pos);
+                        window.draw(rect);
+                    }
                 if(box[i][j]->getID_list()==1)
-                {
-                rect.setFillColor(sf::Color::White);
-                rect.setPosition(pos);
-                window.draw(rect);
-                }
+                    {
+                        rect.setFillColor(sf::Color::White);
+                        rect.setPosition(pos);
+                        window.draw(rect);
+                    }
                 if(box[i][j]->getID_list()==2)
-                {
-                rect.setFillColor(sf::Color(255,190,90,255));
-                rect.setPosition(pos);
-                window.draw(rect);
-                }
+                    {
+                        rect.setFillColor(sf::Color(255,190,90,255));
+                        rect.setPosition(pos);
+                        window.draw(rect);
+                    }
                 if(box[i][j]->getID_list()==3)
-                {
-                rect.setFillColor(sf::Color(40,80,175,255));
-                rect.setPosition(pos);
-                window.draw(rect);
-                }
+                    {
+                        rect.setFillColor(sf::Color(40,80,175,255));
+                        rect.setPosition(pos);
+                        window.draw(rect);
+                    }
                 if(box[i][j]->getID_list()==4)
-                {
-                rect.setFillColor(sf::Color(125,125,125,255));
-                rect.setPosition(pos);
-                window.draw(rect);
-                }
+                    {
+                        rect.setFillColor(sf::Color(125,125,125,255));
+                        rect.setPosition(pos);
+                        window.draw(rect);
+                    }
                 if(box[i][j]->getID_list()==5)
-                {
-                rect.setFillColor(sf::Color(200,245,240,255));
-                rect.setPosition(pos);
-                window.draw(rect);
-                }
+                    {
+                        rect.setFillColor(sf::Color(200,245,240,255));
+                        rect.setPosition(pos);
+                        window.draw(rect);
+                    }
             }
             std::cout<<std::endl;
         }
@@ -123,18 +123,18 @@ void World::drawBox()
     {   
     
         if(box[posY][posX]->getID_list()==0 || box[posY][posX]->getID_list()==-1)
-        {
-        box[posY][posX] = P;
-        P->setCoords(posX,posY);
-        P->setID(1);
+            {
+                box[posY][posX] = P;
+                P->setCoords(posX,posY);
+                P->setID(1);
         //box[posY][posX]->setCoords(posX,posY);
-        }
+            }
         if(P->getID_list()==0 && box[posY][posX]->getID_list()!=1)
-        {
-        box[posY][posX] = P;
-        P->setCoords(posX,posY);
-        P->setID(-1);
-        }
+            {
+                box[posY][posX] = P;
+                P->setCoords(posX,posY);
+                P->setID(-1);
+            }
 
         
     }
@@ -148,9 +148,12 @@ void World::drawBox()
         {
             auto& pd = dynamic_cast<Solid&>(*P);
             pd.transformPixel(P,box);
-        } catch(std::bad_cast& err){
-            err.what();
-        }
+        } 
+                catch(std::bad_cast& err)
+                {
+                    if(std::getenv("GITHUB_ACTIONS"))
+                    std::cout << err.what();
+                }
 
     
     }

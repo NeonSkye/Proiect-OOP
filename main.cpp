@@ -192,7 +192,7 @@ while (window.isOpen())
            
 		        if(sf::Mouse::isButtonPressed(sf::Mouse::Right)) 
 		        {
-                    int error = 0;
+                    int error2 = 0;
 		
                     {
                     try
@@ -203,11 +203,11 @@ while (window.isOpen())
                         {
                             std::cout << err.what() << "\n";
                             pause = -1;
-                            error = 1;
+                            error2 = 1;
                         }                    
 		
                     
-                    if(error!=1) 
+                    if(error2!=1) 
 		             w1.SetPixel(p0,conX,conY);
             
 
