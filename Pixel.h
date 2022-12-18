@@ -34,7 +34,7 @@ class Pixel {
     Pixel(const std::string& Name_, int ID_l, int Type_, int posX_, int posY_);
     Pixel(const Pixel& other);
     Pixel& operator=(const Pixel& other);
-    ~Pixel() = default;
+    virtual ~Pixel() = default;
 }; 
 
 
@@ -45,6 +45,7 @@ class Powder : public Pixel {
     using Pixel::Pixel;
     public:
     virtual void movePixel (std::vector<std::vector<std::shared_ptr<Pixel>>>& box) override;
+    virtual ~Powder() = default;
 };
 
 class Liquid : public Pixel {
@@ -54,6 +55,7 @@ class Liquid : public Pixel {
 
     public:
     virtual void movePixel (std::vector<std::vector<std::shared_ptr<Pixel>>>& box) override;
+    virtual ~Liquid() = default;
 };
 
 class Solid : public Pixel {
@@ -62,6 +64,7 @@ class Solid : public Pixel {
     using Pixel::Pixel;
     public:
     void transformPixel(std::shared_ptr<Pixel> &P, std::vector<std::vector<std::shared_ptr<Pixel>>>&box);
+    virtual ~Solid() = default;
 };
 
 #endif
