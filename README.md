@@ -7,6 +7,7 @@ Controls: Left click to place selected pixel.
 Middle click to change selected pixel.
 Spacebar to pause and unpause.
 F when paused to go to next frame.
+F5 to resize window.
 
 
 ## Tema 1
@@ -32,7 +33,7 @@ F when paused to go to next frame.
   - [x] funcții virtuale (pure) apelate prin pointeri de bază, constructori virtuali (clone)
   - [x] apelarea constructorului din clasa de bază 
   - [x] smart pointers
-  - [ ] `dynamic_cast`
+  - [x] `dynamic_cast`
 - [x] suprascris cc/op= pentru copieri/atribuiri corecte, copy and swap
 - [x] excepții
   - [x] ierarhie proprie cu baza `std::exception` sau derivată din `std::exception`
