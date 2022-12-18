@@ -4,6 +4,8 @@
 #include<vector>
 #include<iostream>
 #include<random>
+#include<memory>
+#include<typeinfo>
 
 class Pixel {
     private:
@@ -22,7 +24,7 @@ class Pixel {
     int getposY(); */
     static void setID(int N);
     static int getID();
-    virtual void movePixel (std::vector<std::vector<Pixel*>>& box);
+    virtual void movePixel (std::vector<std::vector<std::shared_ptr<Pixel>>>& box);
     
     
     friend std::ostream& operator<<(std::ostream& os, const Pixel* px){
@@ -42,7 +44,7 @@ class Powder : public Pixel {
     static int Type;
     using Pixel::Pixel;
     public:
-    virtual void movePixel (std::vector<std::vector<Pixel*>>& box) override;
+    virtual void movePixel (std::vector<std::vector<std::shared_ptr<Pixel>>>& box) override;
 };
 
 class Liquid : public Pixel {
@@ -51,13 +53,15 @@ class Liquid : public Pixel {
     using Pixel::Pixel;
 
     public:
-    virtual void movePixel (std::vector<std::vector<Pixel*>>& box) override;
+    virtual void movePixel (std::vector<std::vector<std::shared_ptr<Pixel>>>& box) override;
 };
 
 class Solid : public Pixel {
     private:
     std::string Name;
     using Pixel::Pixel;
+    public:
+    void transformPixel(std::shared_ptr<Pixel> &P, std::vector<std::vector<std::shared_ptr<Pixel>>>&box);
 };
 
 #endif

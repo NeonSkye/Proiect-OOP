@@ -33,7 +33,7 @@ int Pixel::getID()
     {
     return ID;
     }
-    void Pixel::movePixel(std::vector<std::vector<Pixel*>>& box)
+    void Pixel::movePixel(std::vector<std::vector<std::shared_ptr<Pixel>>>& box)
         {
             box[posY][posX]->getID_list();
         } 
@@ -51,18 +51,18 @@ int Pixel::getID()
     }
     int Pixel::ID = 0;
 
-     void Powder::movePixel(std::vector<std::vector<Pixel*>>& box)
+     void Powder::movePixel(std::vector<std::vector<std::shared_ptr<Pixel>>>& box)
         {
             int move = rand() % 2;
             int posX_ = this->posX;
             int posY_ = this->posY;
-            Pixel *P = box[posY_][posX_];
+             std::shared_ptr<Pixel> P = box[posY_][posX_];
             //P->setCoords(posX_,posY_);
             if(box[posY_][posX_]->getID_list() == 2&&box[posY_+1][posX_]->getID_list() == 0)
             {
 
                 box[posY_+1][posX_] = P;
-                box[posY_][posX_] = new Pixel {"VOID",0,0,posX_,posY_};
+                box[posY_][posX_] = std::make_shared<Pixel>("VOID",0,0,posX_,posY_);
                 
                 P->setCoords(posX_,posY_+1);
 
@@ -70,7 +70,7 @@ int Pixel::getID()
             if(box[posY_][posX_]->getID_list() == 2&&box[posY_+1][posX_]->getID_list() == 3)
             {
                 box[posY_+1][posX_] = P;
-                box[posY_][posX_] = new Liquid {"WATR",3,2,posX_,posY_};
+                box[posY_][posX_] = std::make_shared<Liquid>("WATR",3,2,posX_,posY_);
                 
                 P->setCoords(posX_,posY_+1);
 
@@ -82,7 +82,7 @@ int Pixel::getID()
                 if(box[posY_+1][posX_+1]->getID_list()==0)
                     {
                     box[posY_+1][posX_+1]=P;
-                    box[posY_][posX_] = new  Pixel {"VOID",0,0,posX_,posY_};
+                    box[posY_][posX_] = std::make_shared<Pixel>("VOID",0,0,posX_,posY_);
                      P->setCoords(posX_+1,posY_+1);
                     }
                 }
@@ -90,7 +90,7 @@ int Pixel::getID()
                 if(box[posY_+1][posX_-1]->getID_list()==0)
                     {
                     box[posY_+1][posX_-1]=P;
-                    box[posY_][posX_] = new  Pixel {"VOID",0,0,posX_,posY_};
+                    box[posY_][posX_] = std::make_shared<Pixel>("VOID",0,0,posX_,posY_);
                      P->setCoords(posX_+1,posY_-1);
                     }
        
@@ -99,18 +99,18 @@ int Pixel::getID()
             
         } 
 
-    void Liquid::movePixel(std::vector<std::vector<Pixel*>>& box) 
+    void Liquid::movePixel(std::vector<std::vector<std::shared_ptr<Pixel>>>&box) 
    
         { 
             int move = rand() % 2;
             int posX_ = this->posX;
             int posY_ = this->posY;
-            Pixel *P = box[posY_][posX_];
+            std::shared_ptr<Pixel> P = box[posY_][posX_];
             //P->setCoords(posX_,posY_);
                 if(box[posY_+1][posX_]->getID_list() == 0)
             {
                 box[posY_+1][posX_] = P;
-                box[posY_][posX_] = new Pixel {"VOID",0,0,posX_,posY_};
+                box[posY_][posX_] = std::make_shared<Pixel>("VOID",0,0,posX_,posY_);
 
                 P->setCoords(posX_,posY_+1);
             }
@@ -122,7 +122,7 @@ int Pixel::getID()
                         {
                         
                         box[posY_][posX_+1] = P;
-                        box[posY_][posX_] = new Pixel {"VOID",0,0,posX_,posY_};
+                        box[posY_][posX_] = std::make_shared<Pixel>("VOID",0,0,posX_,posY_);
                         }
                     P->setCoords(posX_+1,posY_);
                 }
@@ -132,7 +132,7 @@ int Pixel::getID()
                         {
                             
                         box[posY_][posX_-1] = P;
-                        box[posY_][posX_] = new Pixel {"VOID",0,0,posX_,posY_};
+                        box[posY_][posX_] = std::make_shared<Pixel>("VOID",0,0,posX_,posY_);
                         }
                     P->setCoords(posX_-1,posY_);
                 }
@@ -140,5 +140,19 @@ int Pixel::getID()
            
             
         } 
+    
+    void Solid::transformPixel(std::shared_ptr<Pixel> &P, std::vector<std::vector<std::shared_ptr<Pixel>>>&box)
+    {
+        int melt = rand() % 4;
+        if(getID_list()==5)
+        {
+            if(melt==3)
+            {
+                box[this->posY][this->posX] = std::make_shared<Liquid>("WATR",3,2,this->posX,this->posY);
+                P = std::make_shared<Liquid>("WATR",3,2,this->posX,this->posY);
+            }
+        }
+    }
 
    
+ 

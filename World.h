@@ -4,11 +4,12 @@
 #include"Pixel.h"
 #include<SFML/Graphics.hpp>
 #include<SFML/System.hpp>
+#include<memory>
 
 class World{
-
+    
     private:
-    std::vector<std::vector<Pixel*>> box;
+    std::vector<std::vector<std::shared_ptr<Pixel>>> box;
    
     int SizeX;
     int SizeY;
@@ -37,7 +38,7 @@ class World{
     void drawBox();
  /*    Pixel* getBox(float conX, float conY); */
     friend std::ostream& operator<<(std::ostream& os, const World& w);
-    void SetPixel(Pixel* P, int posX, int posY);
+    void SetPixel(std::shared_ptr<Pixel> P, int posX, int posY);
     void moveWorld();
     
    void drawPixel(sf::RenderWindow& window);

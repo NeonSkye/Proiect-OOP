@@ -1,5 +1,6 @@
 #include "World.h"
 
+
 void World::Create(int SizeX_, int SizeY_, bool hasBorder)
     {  
         //std::cout<<"Create World "<<SizeX <<" x "<<SizeY<<std::endl; 
@@ -7,7 +8,7 @@ void World::Create(int SizeX_, int SizeY_, bool hasBorder)
         this->SizeY=SizeY_;
         this->has_Border = hasBorder;
         for(int i = 0; i<SizeY; i++){
-            std::vector<Pixel*> v1;
+            std::vector<std::shared_ptr<Pixel>> v1;
 
             for(int j = 0; j<SizeX; j++)
             {
@@ -16,15 +17,15 @@ void World::Create(int SizeX_, int SizeY_, bool hasBorder)
         
                 //std::cout<<"test1";
                 if(i==0||i==SizeY-1)
-                v1.push_back(new Pixel {"WALL",1,4,j,i});
+                v1.push_back(std::make_shared<Pixel>("WALL",1,4,j,i) );
                 else
                     if(j==0||j==SizeX-1)
-                    v1.push_back(new Pixel {"WALL",1,4,j,i});
+                    v1.push_back(std::make_shared<Pixel>("WALL",1,4,j,i));
                         else
-                        v1.push_back(new Pixel {"VOID",0,0,j,i});
+                        v1.push_back(std::make_shared<Pixel>("VOID",0,0,j,i));
                 }
                 else
-                v1.push_back(new Pixel {"VOID",0,0,j,i});
+                v1.push_back(std::make_shared<Pixel>("VOID",0,0,j,i));
                 
             }
             box.push_back(v1); 
@@ -107,12 +108,18 @@ void World::drawBox()
                 rect.setPosition(pos);
                 window.draw(rect);
                 }
+                if(box[i][j]->getID_list()==5)
+                {
+                rect.setFillColor(sf::Color(200,245,240,255));
+                rect.setPosition(pos);
+                window.draw(rect);
+                }
             }
             std::cout<<std::endl;
         }
     }
             
-        void World::SetPixel(Pixel* P, int posX, int posY)
+        void World::SetPixel(std::shared_ptr<Pixel> P, int posX, int posY)
     {   
     
         if(box[posY][posX]->getID_list()==0 || box[posY][posX]->getID_list()==-1)
@@ -132,6 +139,21 @@ void World::drawBox()
         
     }
 
+       void transformPixel(std::shared_ptr<Pixel> P, std::vector<std::vector<std::shared_ptr<Pixel>>>&box)
+    {
+        
+        
+
+        try
+        {
+            auto& pd = dynamic_cast<Solid&>(*P);
+            pd.transformPixel(P,box);
+        } catch(std::bad_cast& err){
+            
+        }
+
+    
+    }
     void World::moveWorld()
     {
         //Pixel aux{"VOID",0,0,0,0,0};
@@ -139,13 +161,17 @@ void World::drawBox()
         {
             for(int j = 1; j<SizeX-1; j++)
             {   
-
+                
                 box[i][j]->setCoords(j,i);
+                transformPixel(box[i][j], box);
                 box[i][j]->movePixel(box);
+                
             }
         }
         
     }
+
+
     
     
 

@@ -3,14 +3,17 @@
 #include<utility>
 #include "Pixel.h"
 #include "World.h"
+#include<memory>
 //#include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
 #include<SFML/System.hpp>
+#include<SFML/Window.hpp>
 #include<cmath>
 #include<thread>
 #ifdef __linux__
 #include <X11/Xlib.h>
 #endif
+#include<stdexcept>
 
 
 /*vx, vy affected by pixel weight*/
@@ -61,24 +64,42 @@ PIXEL TYPES
    
     tr.detach();
 } */
+class app_error : public std::runtime_error {
+    using std::runtime_error::runtime_error;
+};
 
+class coords_error : public app_error {
+    public:
+        explicit coords_error() :
+            app_error("out of bounds") {}
+};
+
+void coords(float conX_ , float conY_ ,int SizeX_, int SizeY_)
+{
+    if((conX_<0||conX_>=SizeX_) || (conY_<0||conY_>=SizeY_))
+        throw coords_error();
+}
 
 int main()
 {
     #ifdef __linux__
     XInitThreads();
     #endif
-    World w1{20,20,1 };
+    int SizeX, SizeY;
+    int full = 0;
+    SizeX = 20; SizeY = 20;
+    World w1{SizeX,SizeY,1};
     std::thread tr;
     
     std::cout<<w1;
     
-    Pixel* p0= new Pixel {"VOID",0,0,0,0};
-    Pixel* p1= new Powder {"DUST",2,1,0,0};
-    Pixel* p2= new Liquid {"WATR",3,2,0,0};
-    Pixel* p3= new Solid {"BRCK",4,3,0,0};
+    std::shared_ptr<Pixel> p0= std::make_shared<Pixel>("VOID",0,0,0,0);
+    std::shared_ptr<Pixel> p1= std::make_shared<Powder>("DUST",2,1,0,0);
+    std::shared_ptr<Pixel> p2= std::make_shared<Liquid>("WATR",3,2,0,0);
+    std::shared_ptr<Pixel> p3= std::make_shared<Solid>("BRCK",4,3,0,0);
+    std::shared_ptr<Pixel> p4= std::make_shared<Solid>("ICE",5,3,0,0);
     //Pixel* select = p1;
-    std::vector<Pixel*> list{p1,p2,p3};
+    std::vector<std::shared_ptr<Pixel>> list{p1,p2,p3,p4};
     int i = 0;
 
     int pause = 1;
@@ -98,7 +119,7 @@ sf::RectangleShape rectangle, bg;
     rect.setFillColor(sf::Color(0,0,0,0));
     rect.setOutlineThickness(5);
     rect.setOutlineColor(sf::Color::White);
-    rect.setSize(sf::Vector2f(50, 50));
+    rect.setSize(sf::Vector2f(15, 15));
     rect.setPosition(20,20);
      
 
@@ -106,18 +127,21 @@ window.draw(bg);
 window.draw(rect);
 while (window.isOpen())
 {
+   window.setTitle("ParticleSim++");
+   window.setMouseCursorVisible(false);
    window.draw(rect);
     float conX, conY;
     window.setActive();
    // Event processing
    sf::Vector2i pos = sf::Mouse::getPosition(window);
-   sf::Vector2f pos2(0,0);
-   pos2.x = pos.x;
-   pos2.y = pos.y;
-   conX = floor(pos.x/50);
-   conY = floor(pos.y/50);
+        sf::Vector2f pos2(0,0);
+        pos2.x = pos.x;
+        pos2.y = pos.y;
+        conX = floor(pos.x/50);
+        conY = floor(pos.y/50);
    sf::Event event;
-   
+
+
    while (window.pollEvent(event))
    {
     
@@ -132,12 +156,24 @@ while (window.isOpen())
            
 		        if(sf::Mouse::isButtonPressed(sf::Mouse::Left)) 
 		        {
+                    int error = 0;
 		
                     {
-                    if((conX>0&&conX<20) && (conY>0&&conY<20)) 
+                    try
                     {
+                    coords(conX,conY,SizeX,SizeY);
+                    } 
+                    catch(std::runtime_error& err)
+                        {
+                            std::cout << err.what() << "\n";
+                            pause = -1;
+                            error = 1;
+                        }
+                   // if((conX>0&&conX<20) && (conY>0&&conY<20)) 
+
+                        if(error != 1)
 		                w1.SetPixel(list[i],conX,conY);
-                    }
+                    
                     }
 
 		        }
@@ -156,17 +192,28 @@ while (window.isOpen())
            
 		        if(sf::Mouse::isButtonPressed(sf::Mouse::Right)) 
 		        {
+                    int error = 0;
 		
                     {
-                    if((conX>0&&conX<20) && (conY>0&&conY<20)) 
+                    try
                     {
+                    coords(conX,conY,SizeX,SizeY);
+                    } 
+                    catch(std::runtime_error& err)
+                        {
+                            std::cout << err.what() << "\n";
+                            pause = -1;
+                            error = 1;
+                        }                    
+		
+                    
+                    if(error!=1) 
 		             w1.SetPixel(p0,conX,conY);
-                    }
-                    }
+            
 
 		        }
                 
-		    }};
+		    }}};
             
 		    tr.detach();
             }
@@ -177,7 +224,7 @@ while (window.isOpen())
             
             if(event.mouseButton.button == sf::Mouse::Middle) 
             {
-                    if(i<2)
+                    if(i<3)
                     i = i+1;
                     else i = 0;
             }
@@ -190,16 +237,35 @@ while (window.isOpen())
             if(sf::Mouse::isButtonPressed(sf::Mouse::XButton2)) {rectangle.setPosition(pos2);}
             break;
         case sf::Event::KeyPressed:
-            if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+
+                if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
                 {
                     pause = pause * -1;
                 }
+
                 if(sf::Keyboard::isKeyPressed(sf::Keyboard::F))
                 {
                     w1.moveWorld();
                 }
-            break;
 
+                if(sf::Keyboard::isKeyPressed(sf::Keyboard::F5))
+                {
+                    full = full + 1;
+                    switch(full)
+                    {   
+                        case 1:
+                        window.setSize(sf::Vector2u(800,800));
+                        break;
+                        case 2:
+                        window.setSize(sf::Vector2u(1000,1000));
+                        break;
+                        case 3:
+                        window.setSize(sf::Vector2u(500,500));
+                        full = 0;
+                        break;
+                    }
+                }
+            break;
         default:
         break;
 
@@ -227,10 +293,13 @@ while (window.isOpen())
             case 2: 
             rect.setOutlineColor(sf::Color(125,125,125,255));
             break;
+            case 3:
+            rect.setOutlineColor(sf::Color(200,245,240,255));
+            break;
             default:
             break;
             }
-                rect.setPosition(pos.x-25,pos.y-25);
+                rect.setPosition(pos.x,pos.y);
                 
      }
     window.draw(bg);
