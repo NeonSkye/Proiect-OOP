@@ -7,6 +7,7 @@ Controls: Left click to place selected pixel.
 Middle click to change selected pixel.
 Spacebar to pause and unpause.
 F when paused to go to next frame.
+F5 to resize window.
 
 
 ## Tema 1
